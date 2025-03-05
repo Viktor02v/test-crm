@@ -61,7 +61,7 @@ const validateForm = () => {
   return isValid
 }
 
-// Add user after validation
+
 const validateAndAddUser = () => {
   if (validateForm()) {
     emit('addUser')
@@ -82,7 +82,7 @@ const closeDialog = () => {
     :style="{ width: '400px' }"
   >
     <div class="flex flex-col space-y-4">
-      <!-- Username Field  -->
+
       <div>
         <label for="add-username" class="block text-sm font-medium mb-1">Username</label>
         <div class="p-inputgroup">
@@ -100,7 +100,7 @@ const closeDialog = () => {
         <small v-if="errors.username" class="p-error">{{ errors.username }}</small>
       </div>
 
-      // Login Field
+
       <div>
         <label for="add-login" class="block text-sm font-medium mb-1">Login</label>
         <div class="p-inputgroup">
@@ -118,7 +118,7 @@ const closeDialog = () => {
         <small v-if="errors.login" class="p-error">{{ errors.login }}</small>
       </div>
 
-      // Password Field
+
       <div>
         <label for="add-password" class="block text-sm font-medium mb-1">Password</label>
         <div class="p-inputgroup">
@@ -137,7 +137,7 @@ const closeDialog = () => {
         <small v-if="errors.password" class="p-error">{{ errors.password }}</small>
       </div>
 
-      // Token Field
+
       <div>
         <label for="add-token" class="block text-sm font-medium mb-1">Generate Token</label>
         <div class="p-inputgroup">
@@ -155,7 +155,7 @@ const closeDialog = () => {
         </div>
       </div>
 
-      // Role Field
+
       <div>
         <label for="add-role" class="block text-sm font-medium mb-1">Pick a Role</label>
         <div class="p-inputgroup">
@@ -174,14 +174,12 @@ const closeDialog = () => {
         <small v-if="errors.role" class="p-error">{{ errors.role }}</small>
       </div>
 
-      // Active User Checkbox
-      <div>
+     <div>
         <Checkbox v-model="newUser.active" inputId="add-active" :binary="true" />
         <label for="add-active" class="ml-2">Active User</label>
       </div>
     </div>
 
-    // Save and Close Buttons
     <div class="flex items-center mt-5 justify-between">
       <Button
         label="Add User"

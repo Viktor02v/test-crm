@@ -14,7 +14,29 @@ export interface User {
 
 const loadUsers = (): User[] => {
   const storedUsers = localStorage.getItem('users');
-  return storedUsers ? JSON.parse(storedUsers) : [];
+  // If no users are found in localStorage, initialize with a default admin user
+  if (!storedUsers) {
+    const defaultAdmin: User = {
+      id: 1,
+      login: 'admin',
+      username: 'Admin',
+      active: true,
+      token: 'default_admin_token',
+      regdate: new Date().toISOString().split('T')[0], // Current date in YYYY-MM-DD format
+      status: 'Active',
+      role: 'admin',
+      password: 'admin123', // Default password (you should hash this in a real application)
+    };
+
+    // Save the default admin to localStorage
+    localStorage.setItem('users', JSON.stringify([defaultAdmin]));
+
+    // Return the default admin as the only user
+    return [defaultAdmin];
+  }
+
+  // If users exist in localStorage, parse and return them
+  return JSON.parse(storedUsers);
 };
 
 const saveUsers = (users: User[]) => {
