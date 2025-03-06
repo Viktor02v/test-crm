@@ -33,7 +33,7 @@ const closeDialog = () => {
     header="Delete User"
     :style="{ width: '400px' }"
   >
-    <p>Are you sure about deleting this user?</p>
+    <p>Are you sure about deleting this?</p>
     <p>To confirm, type <strong>DELETE</strong> in the field below:</p>
     <InputText
       :value="deleteConfirmationText"

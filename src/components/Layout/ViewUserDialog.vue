@@ -2,8 +2,8 @@
 import { defineProps, defineEmits } from 'vue'
 import Dialog from 'primevue/dialog'
 import InputText from 'primevue/inputtext'
-import Checkbox from 'primevue/checkbox'
 import Button from 'primevue/button'
+import InputSwitch from 'primevue/inputswitch'
 
 // Props
 const props = defineProps({
@@ -24,66 +24,70 @@ const closeDialog = () => {
     :visible="showViewUserDialog"
     @update:visible="(value) => emit('update:showViewUserDialog', value)"
     modal
-    header="View User"
+    :closable="false"
     :style="{ width: '400px' }"
   >
-    <div class="flex flex-col space-y-4" v-if="userToView">
+    <template #header>
+      <div class="text-center w-full">
+        <span class="text-xl font-semibold">View User</span>
+      </div>
+    </template>
+
+    <div class="" v-if="userToView">
       <!-- Username Field -->
-      <label for="view-username">Username</label>
+      <label for="view-username" class="text-sm font-medium">Username</label>
       <div class="p-inputgroup">
-        <span class="p-inputgroup-addon">
+        <span class="p-inputgroup-addon bg-[#E2E8F0]">
           <i class="pi pi-user"></i>
         </span>
         <InputText
           id="view-username"
           v-model="userToView.username"
           disabled
-          class="w-full h-10 mt-2 pl-2"
+          class="p-input"
         />
       </div>
 
-      <!-- Login Field -->
       <div class="">
-        <label for="view-login">Login</label>
+        <label for="view-login" class="block text-sm font-medium mb-1">Login</label>
         <div class="p-inputgroup">
-          <span class="p-inputgroup-addon">
-            <i class="pi pi-id-card"></i>
+          <span class="p-inputgroup-addon bg-[#E2E8F0]">
+            <i class="pi pi-id-card "></i>
           </span>
           <InputText
             id="view-login"
             v-model="userToView.login"
             disabled
-            class="w-full h-10 mt-2 pl-2"
+            class="p-input"
           />
         </div>
       </div>
 
-      <!-- Token Field (Admin Only) -->
       <div v-if="isAdmin">
-        <label for="view-token">Token</label>
+        <label for="view-token" class="block text-sm font-medium mb-1">Token</label>
         <InputText
           id="view-token"
           v-model="userToView.token"
           disabled
-          class="w-full h-10 mt-2 pl-2"
+          class="p-input"
         />
       </div>
 
       <!-- Role Field -->
-      <div>
-        <label for="view-role">Role</label>
+      <div class="mt-4">
+        <label for="view-role" class="block text-sm font-medium mb-1">Role</label>
         <InputText
           id="view-role"
           v-model="userToView.role"
           disabled
-          class="w-full h-10 mt-2 pl-2"
+          class="p-input"
         />
       </div>
 
       <!-- Active User Checkbox -->
-      <div>
-        <Checkbox v-model="userToView.active" inputId="add-active" disabled :binary="true" />
+      <div class="flex items-center justify-between mt-4">
         <label for="add-active" class="ml-2">Active User</label>
+        <InputSwitch v-model="userToView.active" inputId="add-active" disabled :binary="true" />
       </div>
     </div>
 
@@ -101,5 +105,18 @@ const closeDialog = () => {
 <style scoped>
 .p-inputgroup {
   margin-bottom: 1rem;
+}
+
+.p-inputgroup-addon{
+  border: 1px solid #CBD5E1;
+  border-right: 0;
+}
+
+.p-input{
+  width: 100%;
+  height: 39px;
+  border: 1px solid #CBD5E1;
+  border-left: 0;
+  padding-left: 0.5rem;
 }
 </style>

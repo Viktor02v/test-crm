@@ -1,61 +1,60 @@
 import { ref } from 'vue';
-import { mockApi, type User } from '@/services/mokiApi';
+import { mockApiService, type User } from '@/services/mockApiService';
 import { useToast } from 'primevue/usetoast';
 import { useAuthStore } from '@/stores/authStore';
 
 export function useUserManagement() {
-const toast = useToast()
-const users = ref<User[]>([])
-const selectedUsers = ref<number[]>([])
-const authStore = useAuthStore()
-const showGreeting = ref(true)
-const username = authStore.user?.username || 'Guest'
-const isAdmin = authStore.user?.role === 'admin'
-const isManager = authStore.user?.role === 'manager'
+  const toast = useToast();
+  const users = ref<User[]>([]);
+  const selectedUsers = ref<number[]>([]);
+  const authStore = useAuthStore();
+  const showGreeting = ref(true);
+  const username = authStore.user?.username || 'Guest';
+  const isAdmin = authStore.user?.role === 'admin';
+  const isManager = authStore.user?.role === 'manager';
 
-const showViewUserDialog = ref(false);
-const userToView = ref<User | null>(null);
+  const showViewUserDialog = ref(false);
+  const userToView = ref<User | null>(null);
 
-const showEditUserDialog = ref(false)
-const userToEdit = ref<User | null>(null)
+  const showEditUserDialog = ref(false);
+  const userToEdit = ref<User | null>(null);
 
-const showDeleteDialog = ref(false)
-const deleteConfirmationText = ref('')
+  const showDeleteDialog = ref(false);
+  const deleteConfirmationText = ref('');
 
-const showAddUserDialog = ref(false)
-const newUser = ref({
-  username: '',
-  login: '',
-  password: '',
-  token: 'erwb23g', // Default token
-  role: '',
-  active: true,
-})
+  const showAddUserDialog = ref(false);
+  const newUser = ref({
+    username: '',
+    login: '',
+    password: '',
+    token: 'erwb23g', // Default token
+    role: '',
+    active: true,
+  });
 
-const roles = ref(['admin', 'manager', 'user'])
+  const roles = ref(['admin', 'manager', 'user']);
 
-const fetchUsers = async () => {
-  try {
-    const response = await mockApi.getUsers();
-    if (!response || !response.data) {
-      throw new Error('Invalid response from server');
+  const fetchUsers = async () => {
+    try {
+      const response = await mockApiService.getUsers();
+      if (response.data) {
+        users.value = response.data.map((user: User) => ({
+          ...user,
+          status: user.active ? 'Active' : `Last Active: ${user.lastActiveDate || user.regdate}`,
+        }));
+      } else {
+        throw new Error('No data returned from the server');
+      }
+    } catch (error) {
+      console.error('Error fetching users:', error);
+      toast.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Failed to fetch users.',
+        life: 3000,
+      });
     }
-    users.value = response.data;
-    localStorage.setItem('users', JSON.stringify(users.value));
-  } catch (error) {
-    console.error('Error fetching users:', error);
-    const savedUsers = localStorage.getItem('users');
-    if (savedUsers) {
-      users.value = JSON.parse(savedUsers);
-    }
-    toast.add({
-      severity: 'error',
-      summary: 'Error',
-      detail: 'Failed to fetch users. Loading from backup.',
-      life: 3000,
-    });
-  }
-};
+  };
 
 const toggleSelectAll = (event: Event) => {
   const checked = (event.target as HTMLInputElement).checked
@@ -76,7 +75,7 @@ const deleteSelectedUsers = async () => {
   console.log('Selected Users to Delete:', selectedUsers.value);
 
   try {
-    await Promise.all(selectedUsers.value.map((id) => mockApi.deleteUser(id)));
+    await Promise.all(selectedUsers.value.map((id) => mockApiService.deleteUser(id)));
 
     users.value = users.value.filter((user) => !selectedUsers.value.includes(user.id));
     selectedUsers.value = [];
@@ -100,8 +99,13 @@ const deleteSelectedUsers = async () => {
     });
   } finally {
     showDeleteDialog.value = false;
-    deleteConfirmationText.value = ''; // Reset confirmation text
+    deleteConfirmationText.value = '';
   }
+};
+
+  const generateToken = () => {
+  const token = Math.random().toString(36).substring(2, 10).toUpperCase();
+  newUser.value.token = token; // Update the newUser token
 };
 
 const addUser = async () => {
@@ -122,12 +126,12 @@ const addUser = async () => {
 
   const userToAdd = {
     ...newUser.value,
-    regdate: new Date().toISOString().split('T')[0], // Format registration date
+    regdate: new Date().toISOString().split('T')[0],
     status: 'Active',
   };
 
   try {
-    const response = await mockApi.addUser(userToAdd);
+    const response = await mockApiService.addUser(userToAdd);
 
     if (!response || !response.data) {
       throw new Error('Invalid response from server');
@@ -144,7 +148,6 @@ const addUser = async () => {
       life: 3000,
     });
 
-    // Close the dialog and reset the form
     showAddUserDialog.value = false;
     newUser.value = {
       username: '',
@@ -168,55 +171,58 @@ const addUser = async () => {
 const editUser = (userId: number) => {
   const user = users.value.find((user) => user.id === userId)
   if (user) {
-    userToEdit.value = { ...user } // Clone the user object
-    showEditUserDialog.value = true // Open the edit dialog
+    userToEdit.value = { ...user }
+    showEditUserDialog.value = true
   }
 }
 
 const saveUserChanges = async () => {
-  if (!userToEdit.value) return
+  if (!userToEdit.value) return;
 
   try {
-    const response = await mockApi.updateUser(userToEdit.value)
+    // Update lastActiveDate if the user is being deactivated
+    if (userToEdit.value.active === false) {
+      userToEdit.value.lastActiveDate = new Date().toISOString().split('T')[0];
+    }
+
+    const response = await mockApiService.updateUser(userToEdit.value);
 
     if (!response || !response.data) {
-      throw new Error('Invalid response from server')
+      throw new Error('Invalid response from server');
     }
 
     // Update the list
-    const index = users.value.findIndex((u) => u.id === userToEdit.value!.id)
+    const index = users.value.findIndex((u) => u.id === userToEdit.value!.id);
     if (index !== -1) {
-      users.value[index] = response.data
+      users.value[index] = response.data;
     }
 
-    // Persist to localStorage
-    localStorage.setItem('users', JSON.stringify(users.value))
+    localStorage.setItem('users', JSON.stringify(users.value));
 
     toast.add({
       severity: 'success',
       summary: 'Success',
       detail: 'User updated successfully.',
       life: 3000,
-    })
+    });
 
-    // Close the dialog
-    showEditUserDialog.value = false
+    showEditUserDialog.value = false;
   } catch (error) {
-    console.error('Error updating user:', error)
+    console.error('Error updating user:', error);
     toast.add({
       severity: 'error',
       summary: 'Error',
       detail: 'Failed to update user. Please try again later.',
       life: 3000,
-    })
+    });
   }
-}
+};
 
 const viewUser = (userId: number) => {
   const user = users.value.find((user) => user.id === userId);
   if (user) {
     userToView.value = { ...user }; // Clone the user object
-    showViewUserDialog.value = true; // Open the view dialog
+    showViewUserDialog.value = true;
   }
 };
 
@@ -242,7 +248,8 @@ return {
   viewUser,
   saveUserChanges,
   editUser,
-  addUser
+  addUser,
+  generateToken,
   };
 }
 
