@@ -180,10 +180,7 @@ const closeDialog = () => {
       <!-- Role Field -->
       <div>
         <label for="add-role" class="block text-sm font-medium mb-1">Pick a Role</label>
-        <div class="p-inputgroup">
-          <span class="p-inputgroup-addon">
-            <i class="pi pi-users"></i>
-          </span>
+        <div class="p-inputgroup border-l rounded-md">
           <Dropdown
             id="add-role"
             v-model="newUser.role"
