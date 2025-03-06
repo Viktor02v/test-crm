@@ -36,15 +36,39 @@ const validateForm = () => {
   if (!props.newUser.username) {
     errors.value.username = 'Username is required!';
     isValid = false;
+  } else if (props.newUser.username.trim() === '') {
+    errors.value.username = 'Username cannot be just spaces!';
+    isValid = false;
+  } else if (props.newUser.username.length < 3) {
+    errors.value.username = 'Username must be at least 3 characters!';
+    isValid = false;
   }
 
   if (!props.newUser.login) {
     errors.value.login = 'Login is required!';
     isValid = false;
+  } else if (props.newUser.login.trim() === '') {
+    errors.value.login = "Login can't be just spaces!";
+    isValid = false;
+  } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(props.newUser.login)) {
+    errors.value.login = 'Login must be a valid email!';
+    isValid = false;
   }
 
-  if (!props.newUser.password ) {
+  if (!props.newUser.password) {
     errors.value.password = 'Password is required!';
+    isValid = false;
+  } else if (props.newUser.password.trim() === '') {
+    errors.value.password = 'Password cannot be just spaces!';
+    isValid = false;
+  } else if (props.newUser.password.length < 8) {
+    errors.value.password = 'Password must be at least 8 characters long!';
+    isValid = false;
+  } else if (!/[A-Z]/.test(props.newUser.password)) {
+    errors.value.password = 'Password must contain at least one uppercase letter!';
+    isValid = false;
+  } else if (!/[0-9]/.test(props.newUser.password)) {
+    errors.value.password = 'Password must contain at least one number!';
     isValid = false;
   }
 
@@ -83,7 +107,6 @@ const closeDialog = () => {
     </template>
 
     <div class="flex flex-col space-y-4">
-
       <div>
         <label for="add-username" class="block text-sm font-medium mb-1">Username</label>
         <div class="p-inputgroup">
@@ -94,7 +117,7 @@ const closeDialog = () => {
             id="add-username"
             v-model="newUser.username"
             placeholder="yourname"
-            class="w-full"
+            class="p-input"
             :class="{ 'p-invalid': errors.username }"
           />
         </div>
@@ -106,13 +129,13 @@ const closeDialog = () => {
         <label for="add-login" class="block text-sm font-medium mb-1">Login</label>
         <div class="p-inputgroup">
           <span class="p-inputgroup-addon">
-            <i class="pi pi-sign-in"></i>
+            <i class="pi pi-id-card"></i>
           </span>
           <InputText
             id="add-login"
             v-model="newUser.login"
             placeholder="crmsystem"
-            class="w-full"
+            class="p-input"
             :class="{ 'p-invalid': errors.login }"
           />
         </div>
@@ -124,13 +147,13 @@ const closeDialog = () => {
         <label for="add-password" class="block text-sm font-medium mb-1">Password</label>
         <div class="p-inputgroup">
           <span class="p-inputgroup-addon">
-            <i class="pi pi-lock"></i>
+            <i class="pi pi-key "></i>
           </span>
           <Password
             id="add-password"
             v-model="newUser.password"
             placeholder="12345678"
-            class="w-full"
+            class="p-input"
             :class="{ 'p-invalid': errors.password }"
             :feedback="false"
             toggleMask
@@ -143,14 +166,11 @@ const closeDialog = () => {
       <div>
         <label for="add-token" class="block text-sm font-medium mb-1">Generate Token</label>
         <div class="p-inputgroup">
-          <span class="p-inputgroup-addon">
-            <i class="pi pi-key"></i>
-          </span>
           <InputText
             id="add-token"
             v-model="newUser.token"
             placeholder="erwb23g"
-            class="w-full"
+            class="p-input"
             disabled
           />
           <Button icon="pi pi-refresh" class="p-button-outlined" @click="props.generateToken" />
@@ -169,7 +189,7 @@ const closeDialog = () => {
             v-model="newUser.role"
             :options="roles"
             placeholder="Not Selected"
-            class="w-full"
+            class="p-input"
             :class="{ 'p-invalid': errors.role }"
           />
         </div>
@@ -209,20 +229,25 @@ const closeDialog = () => {
   border-color: #ef4444 !important;
 }
 
+.p-inputgroup-addon{
+  border: 1px solid #CBD5E1;
+  border-right: 0;
+}
+
 .p-inputgroup {
   margin-bottom: 1rem;
 }
 
-
-:deep(.p-inputswitch.p-inputswitch-checked .p-inputswitch-slider) {
-  background-color: #3b82f6 !important;
+.p-button-outlined{
+  border: 1px solid #CBD5E1;
+  border-left: 0;
 }
 
-:deep(.p-inputswitch.p-inputswitch-checked:hover .p-inputswitch-slider) {
-  background-color: #2563eb !important;
-}
-
-:deep(.p-inputswitch.p-inputswitch-checked .p-inputswitch-slider:before) {
-  background-color: #ffffff !important;
+.p-input{
+  width: 100%;
+  height: 39px;
+  border: 1px solid #CBD5E1;
+  border-left: 0;
+  padding-left: 0.5rem;
 }
 </style>
