@@ -5,7 +5,7 @@ import InputGroupAddon from 'primevue/inputgroupaddon'
 import Button from 'primevue/button'
 import Card from 'primevue/card'
 import { ref, onMounted, onUnmounted } from 'vue'
-import { mockApi } from '@/services/mokiApi'
+import { mockApiService } from '@/services/mockApiService'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/authStore'
 
@@ -55,7 +55,7 @@ const handleLogIn = async () => {
   }
 
   try {
-    const response = await mockApi.login({
+    const response = await mockApiService.login({
       login: email.value,
       password: password.value,
     })
