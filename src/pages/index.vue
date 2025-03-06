@@ -97,7 +97,7 @@ onUnmounted(() => {
 </script>
 <template>
   <div
-    class="bg-gradient-to-t relative from-[#BFDBFE] to-[#E2E8F0] flex flex-col justify-around w-full space-y-[32px] h-full py-[30px] px-[104px]"
+    class=" relative flex flex-col justify-around w-full space-y-[32px] h-full py-[30px] px-[104px]"
   >
     <!-- Hello Element -->
     <div class="border border-white bg-white w-full py-[16px] px-[24px] rounded">
@@ -198,6 +198,8 @@ onUnmounted(() => {
       </Button>
     </div>
 
+
+    <!-- Error Message -->
     <div v-if="error" class="w-full flex item-end justify-end">
       <div
         class="absolute w-[348px] bottom-[48px] bg-[#FEF2F2F2] border border-[#FECACA] text-white py-[10.5px] px-[5px] rounded shadow-lg"

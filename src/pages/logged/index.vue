@@ -57,7 +57,7 @@ console.log(users.value)
 <template>
   <div class="w-full relative h-full flex flex-col items-center justify-center">
     <!-- Action Buttons -->
-    <div>
+    <div class="w-[1142px]">
       <div class="w-full">
         <div class="flex items-center justify-between">
           <div
@@ -130,7 +130,7 @@ console.log(users.value)
     />
 
     <!-- Welcome Greeting -->
-    <div v-if="showGreeting" class="w-full px-10 flex item-end justify-end">
+    <div v-if="showGreeting" class="w-[1142px] flex item-end justify-end">
       <div
         class="absolute w-[348px] bottom-[48px] bg-[#F0FDF4F2] border border-[#BBF7D0] text-white py-[10.5px] px-[5px] rounded shadow-lg"
       >

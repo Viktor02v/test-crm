@@ -128,7 +128,7 @@ const addUser = async () => {
 
   const userToAdd = {
     ...newUser.value,
-    regdate: new Date().toISOString().split('T')[0], 
+    regdate: new Date().toISOString().split('T')[0],
     status: 'Active',
   };
 
@@ -174,8 +174,8 @@ const addUser = async () => {
 const editUser = (userId: number) => {
   const user = users.value.find((user) => user.id === userId)
   if (user) {
-    userToEdit.value = { ...user } // Clone the user object
-    showEditUserDialog.value = true // Open the edit dialog
+    userToEdit.value = { ...user }
+    showEditUserDialog.value = true
   }
 }
 
