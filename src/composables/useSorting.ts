@@ -123,6 +123,31 @@ export function useSorting() {
     return order === 1 ? lengthA > lengthB : lengthA < lengthB;
   };
 
+  const sortByStatus = (event: any) => {
+    const data = [...event.data];
+    const order = event.order;
+    for (let i = 1; i < data.length; i++) {
+      const current = data[i];
+      let j = i - 1;
+      while (j >= 0 && compareStatus(data[j], current, order)) {
+        data[j + 1] = data[j];
+        j--;
+      }
+      data[j + 1] = current;
+    }
+    return data;
+  };
+
+  const compareStatus = (a: any, b: any, order: number) => {
+    if (a.active === b.active) {
+      const dateA = new Date(a.lastActiveDate || a.regdate).getTime();
+      const dateB = new Date(b.lastActiveDate || b.regdate).getTime();
+      return order === 1 ? dateA > dateB : dateA < dateB;
+    }
+    // Active users should come first
+    return order === 1 ? a.active : !a.active;
+  };
+
   return {
     sortById,
     sortByLogin,
@@ -130,5 +155,6 @@ export function useSorting() {
     sortByName,
     sortByActive,
     sortByToken,
+    sortByStatus,
   };
 }

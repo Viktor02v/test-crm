@@ -3,8 +3,8 @@ import { ref, defineProps, defineEmits } from 'vue'
 import Dialog from 'primevue/dialog'
 import InputText from 'primevue/inputtext'
 import Dropdown from 'primevue/dropdown'
-import Checkbox from 'primevue/checkbox'
 import Button from 'primevue/button'
+import ToggleSwitch from 'primevue/togglebutton'
 
 const props = defineProps({
   showAddUserDialog: { type: Boolean, required: true },
@@ -61,7 +61,6 @@ const validateForm = () => {
   return isValid
 }
 
-
 const validateAndAddUser = () => {
   if (validateForm()) {
     emit('addUser')
@@ -78,11 +77,12 @@ const closeDialog = () => {
     :visible="showAddUserDialog"
     @update:visible="(value) => emit('update:showAddUserDialog', value)"
     modal
+    class="px-[24px]"
+    :headerStyle="{ textAlign: 'center' }"
     header="Add New User"
     :style="{ width: '400px' }"
   >
     <div class="flex flex-col space-y-4">
-
       <div>
         <label for="add-username" class="block text-sm font-medium mb-1">Username</label>
         <div class="p-inputgroup">
@@ -100,7 +100,6 @@ const closeDialog = () => {
         <small v-if="errors.username" class="p-error">{{ errors.username }}</small>
       </div>
 
-
       <div>
         <label for="add-login" class="block text-sm font-medium mb-1">Login</label>
         <div class="p-inputgroup">
@@ -117,7 +116,6 @@ const closeDialog = () => {
         </div>
         <small v-if="errors.login" class="p-error">{{ errors.login }}</small>
       </div>
-
 
       <div>
         <label for="add-password" class="block text-sm font-medium mb-1">Password</label>
@@ -137,7 +135,6 @@ const closeDialog = () => {
         <small v-if="errors.password" class="p-error">{{ errors.password }}</small>
       </div>
 
-
       <div>
         <label for="add-token" class="block text-sm font-medium mb-1">Generate Token</label>
         <div class="p-inputgroup">
@@ -154,7 +151,6 @@ const closeDialog = () => {
           <Button icon="pi pi-refresh" class="p-button-outlined" @click="generateToken" />
         </div>
       </div>
-
 
       <div>
         <label for="add-role" class="block text-sm font-medium mb-1">Pick a Role</label>
@@ -174,9 +170,9 @@ const closeDialog = () => {
         <small v-if="errors.role" class="p-error">{{ errors.role }}</small>
       </div>
 
-     <div>
-        <Checkbox v-model="newUser.active" inputId="add-active" :binary="true" />
+      <div class="flex items-center justify-between">
         <label for="add-active" class="ml-2">Active User</label>
+        <ToggleSwitch v-model="newUser.active" inputId="add-active" :binary="true" />
       </div>
     </div>
 
@@ -209,3 +205,6 @@ const closeDialog = () => {
   margin-bottom: 1rem;
 }
 </style>
+
+
+

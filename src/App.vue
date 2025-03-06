@@ -1,7 +1,7 @@
 <script setup lang="ts"></script>
 <template>
   <div>
-    <main class="bg-gradient-to-t from-slate-950 to-slate-200 w-full px-[100px] h-[100vh]">
+    <main class="bg-gradient-to-t from-slate-950 to-slate-200 w-full h-[100vh]">
       <RouterView />
     </main>
   </div>

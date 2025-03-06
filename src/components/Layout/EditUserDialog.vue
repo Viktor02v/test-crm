@@ -6,6 +6,7 @@ import Dropdown from 'primevue/dropdown'
 import Checkbox from 'primevue/checkbox'
 import Button from 'primevue/button'
 import { useUserManagement } from '@/composables/useUserManagement'
+import ToggleSwitch from 'primevue/togglebutton'
 
 const props = defineProps({
   showEditUserDialog: { type: Boolean, required: true },
@@ -120,9 +121,9 @@ const saveUserChanges = () => {
       </div>
 
       <!-- Active User Checkbox -->
-      <div>
-        <Checkbox v-model="userToEdit.active" inputId="edit-active" :binary="true" />
+      <div class="flex items-center justify-between">
         <label for="edit-active" class="ml-2">Active User</label>
+        <ToggleSwitch v-model="userToEdit.active" inputId="edit-active" :binary="true" />
       </div>
     </div>
 

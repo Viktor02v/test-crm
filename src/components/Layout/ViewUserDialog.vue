@@ -4,6 +4,7 @@ import Dialog from 'primevue/dialog'
 import InputText from 'primevue/inputtext'
 import Checkbox from 'primevue/checkbox'
 import Button from 'primevue/button'
+import ToggleSwitch from 'primevue/togglebutton'
 
 // Props
 const props = defineProps({
@@ -81,9 +82,9 @@ const closeDialog = () => {
       </div>
 
       <!-- Active User Checkbox -->
-      <div>
-        <Checkbox v-model="userToView.active" inputId="add-active" disabled :binary="true" />
+      <div class="flex items-center justify-between">
         <label for="add-active" class="ml-2">Active User</label>
+        <ToggleSwitch v-model="userToView.active" inputId="add-active" disabled :binary="true" />
       </div>
     </div>
 

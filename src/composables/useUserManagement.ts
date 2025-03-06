@@ -128,7 +128,7 @@ const addUser = async () => {
 
   const userToAdd = {
     ...newUser.value,
-    regdate: new Date().toISOString().split('T')[0], // Format registration date
+    regdate: new Date().toISOString().split('T')[0], 
     status: 'Active',
   };
 

@@ -11,29 +11,37 @@ import ViewUserDialog from '@/components/Layout/ViewUserDialog.vue'
 
 const {
   users,
+  roles,
+  newUser,
+  isAdmin,
   username,
+  isManager,
   userToEdit,
   userToView,
-  saveUserChanges,
-  addUser,
-  showViewUserDialog,
-  showEditUserDialog,
-  newUser,
-  roles,
-  showAddUserDialog,
-  showDeleteDialog,
   selectedUsers,
   showGreeting,
-  isAdmin,
-  isManager,
-  fetchUsers,
+  showViewUserDialog,
+  showEditUserDialog,
+  showAddUserDialog,
+  showDeleteDialog,
   deleteConfirmationText,
-  deleteSelectedUsers,
+  addUser,
   viewUser,
   editUser,
+  fetchUsers,
+  saveUserChanges,
+  deleteSelectedUsers,
 } = useUserManagement()
 
-const { sortById, sortByLogin, sortByRegDate, sortByActive, sortByName, sortByToken } = useSorting()
+const {
+  sortById,
+  sortByName,
+  sortByLogin,
+  sortByToken,
+  sortByActive,
+  sortByStatus,
+  sortByRegDate,
+} = useSorting()
 
 onMounted(async () => {
   await fetchUsers()
@@ -45,47 +53,55 @@ onMounted(async () => {
 console.log(users.value)
 </script>
 
+=
 <template>
-  <div class="w-full h-full px-[145px] flex flex-col items-center justify-center p-4">
+  <div class="w-full relative h-full flex flex-col items-center justify-center">
     <!-- Action Buttons -->
-    <div class="flex w-full items-center justify-between mb-4">
-      <div
-        v-if="isAdmin"
-        class="py-2 px-5 flex items-center space-x-3 bg-blue-600 text-white rounded"
-      >
-        <i class="pi pi-plus"></i>
-        <Button label="Add User" class="p-button-success mr-2" @click="showAddUserDialog = true" />
+    <div>
+      <div class="w-full">
+        <div class="flex items-center justify-between">
+          <div
+            v-if="isAdmin"
+            class="py-2 px-5 flex items-center space-x-3 bg-blue-600 text-white rounded"
+          >
+            <i class="pi pi-plus" style="font-size: 20px" />
+            <Button label="Add User" class="text-[20px]" @click="showAddUserDialog = true" />
+          </div>
+          <div
+            v-if="isAdmin || isManager"
+            class="flex items-center space-x-3 py-2 px-5 bg-red-600 text-white rounded"
+          >
+            <i class="pi pi-trash" style="font-size: 20px" />
+            <Button
+              label="Delete User"
+              class="text-[20px]"
+              :disabled="selectedUsers.length === 0"
+              @click="showDeleteDialog = true"
+            />
+          </div>
+        </div>
       </div>
-      <div
-        v-if="isAdmin || isManager"
-        class="flex items-center space-x-3 py-2 px-5 bg-red-600 text-white rounded"
-      >
-        <i class="pi pi-trash"></i>
-        <Button
-          label="Delete User"
-          class="p-button-danger"
-          :disabled="selectedUsers.length === 0"
-          @click="showDeleteDialog = true"
-        />
-      </div>
+
+      <!-- User Table -->
+      <UserTable
+        :users="users"
+        :selectedUsers="selectedUsers"
+        @update:selectedUsers="(value) => (selectedUsers = value)"
+        :isAdmin="isAdmin"
+        :isManager="isManager"
+        :sortById="sortById"
+        :sortByLogin="sortByLogin"
+        :sortByRegDate="sortByRegDate"
+        :sortByName="sortByName"
+        :sortByActive="sortByActive"
+        :sortByToken="sortByToken"
+        :sortByStatus="sortByStatus"
+        @viewUser="viewUser"
+        @editUser="editUser"
+      />
     </div>
 
-    <UserTable
-      :users="users"
-      :selectedUsers="selectedUsers"
-      @update:selectedUsers="(value) => (selectedUsers = value)"
-      :isAdmin="isAdmin"
-      :isManager="isManager"
-      :sortById="sortById"
-      :sortByLogin="sortByLogin"
-      :sortByRegDate="sortByRegDate"
-      :sortByName="sortByName"
-      :sortByActive="sortByActive"
-      :sortByToken="sortByToken"
-      @viewUser="viewUser"
-      @editUser="editUser"
-    />
-
+    <!-- Dialogs -->
     <AddUserDialog
       v-model:showAddUserDialog="showAddUserDialog"
       :newUser="newUser"
@@ -114,16 +130,27 @@ console.log(users.value)
     />
 
     <!-- Welcome Greeting -->
-    <div
-      v-if="showGreeting"
-      class="absolute bottom-5 right-5 bg-green-500 text-white p-4 rounded shadow-lg flex items-center justify-between"
-    >
-      <span>Welcome, {{ username }}! 🎉</span>
-      <Button
-        icon="pi pi-times"
-        class="ml-3 p-1 bg-transparent border-none text-white cursor-pointer"
-        @click="showGreeting = false"
-      />
+    <div v-if="showGreeting" class="w-full px-10 flex item-end justify-end">
+      <div
+        class="absolute w-[348px] bottom-[48px] bg-[#F0FDF4F2] border border-[#BBF7D0] text-white py-[10.5px] px-[5px] rounded shadow-lg"
+      >
+        <div class="w-full flex items-start justify-between">
+          <div class="flex items-start space-x-[7px]">
+            <i class="pi pi-check text-[#16A34A] pt-1"></i>
+            <div class="flex flex-col text-14px">
+              <span class="text-[#16A34A]">Success</span>
+              <span class="text-black">Hello {{ username }}!</span>
+            </div>
+          </div>
+          <div>
+            <Button
+              icon="pi pi-times"
+              class="bg-transparent border-none text-white cursor-pointer text-[#16A34A]"
+              @click="showGreeting = false"
+            />
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
