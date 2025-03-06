@@ -123,8 +123,12 @@ const handleEditUser = (userId: number) => {
       :sortable="true"
       :sortFunction="sortByRegDate"
     />
-    <Column class="border-b" v-if="isAdmin" field="status" header="User Active Date" />
-    <Column class="border-b" field="role" header="Role" />
+    <Column class="border-b" field="status" header="User Active Date">
+      <template #body="slotProps">
+        <span v-if="slotProps.data.active">Active</span>
+        <span v-else>{{ slotProps.data.lastActiveDate || slotProps.data.regdate }}</span>
+      </template>
+    </Column>
 
     <!-- View Column -->
     <Column class="border-b" header="View">

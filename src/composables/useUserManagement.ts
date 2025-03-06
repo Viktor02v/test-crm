@@ -40,7 +40,13 @@ const fetchUsers = async () => {
     if (!response || !response.data) {
       throw new Error('Invalid response from server');
     }
-    users.value = response.data;
+
+    // Update the status field for each user
+    users.value = response.data.map((user) => ({
+      ...user,
+      status: user.active ? 'Active' : `Last Active: ${user.lastActiveDate || user.regdate}`,
+    }));
+
     localStorage.setItem('users', JSON.stringify(users.value));
   } catch (error) {
     console.error('Error fetching users:', error);
@@ -174,43 +180,48 @@ const editUser = (userId: number) => {
 }
 
 const saveUserChanges = async () => {
-  if (!userToEdit.value) return
+  if (!userToEdit.value) return;
 
   try {
-    const response = await mockApi.updateUser(userToEdit.value)
+    // Update lastActiveDate if the user is being deactivated
+    if (userToEdit.value.active === false) {
+      userToEdit.value.lastActiveDate = new Date().toISOString().split('T')[0];
+    }
+
+    const response = await mockApi.updateUser(userToEdit.value);
 
     if (!response || !response.data) {
-      throw new Error('Invalid response from server')
+      throw new Error('Invalid response from server');
     }
 
     // Update the list
-    const index = users.value.findIndex((u) => u.id === userToEdit.value!.id)
+    const index = users.value.findIndex((u) => u.id === userToEdit.value!.id);
     if (index !== -1) {
-      users.value[index] = response.data
+      users.value[index] = response.data;
     }
 
     // Persist to localStorage
-    localStorage.setItem('users', JSON.stringify(users.value))
+    localStorage.setItem('users', JSON.stringify(users.value));
 
     toast.add({
       severity: 'success',
       summary: 'Success',
       detail: 'User updated successfully.',
       life: 3000,
-    })
+    });
 
     // Close the dialog
-    showEditUserDialog.value = false
+    showEditUserDialog.value = false;
   } catch (error) {
-    console.error('Error updating user:', error)
+    console.error('Error updating user:', error);
     toast.add({
       severity: 'error',
       summary: 'Error',
       detail: 'Failed to update user. Please try again later.',
       life: 3000,
-    })
+    });
   }
-}
+};
 
 const viewUser = (userId: number) => {
   const user = users.value.find((user) => user.id === userId);

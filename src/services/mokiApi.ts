@@ -10,6 +10,7 @@ export interface User {
   status: string;
   role: string;
   password: string;
+  lastActiveDate?: string;
 }
 
 const loadUsers = (): User[] => {
@@ -91,17 +92,21 @@ export const mockApi = {
   },
 
   async updateUser(updatedUser: User) {
-    await delay(1000); // Simulate delay
+    await delay(1000);
     const users = loadUsers();
     const index = users.findIndex((u) => u.id === updatedUser.id);
 
     if (index === -1) {
-      throw { response: { status: 404, data: { message: 'User not found' } } };
+      throw { status: 404, message: 'User not found' };
     }
 
-    // Update the user
+    // Update lastActiveDate if the user is being deactivated
+    if (updatedUser.active === false && users[index].active === true) {
+      updatedUser.lastActiveDate = new Date().toISOString().split('T')[0];
+    }
+
     users[index] = updatedUser;
     saveUsers(users);
     return { data: updatedUser, status: 200 };
-  },
+  }
 };
