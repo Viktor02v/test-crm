@@ -25,6 +25,7 @@ const {
   showAddUserDialog,
   showDeleteDialog,
   deleteConfirmationText,
+  generateToken,
   addUser,
   viewUser,
   editUser,
@@ -107,6 +108,7 @@ console.log(users.value)
       :newUser="newUser"
       :roles="roles"
       @addUser="addUser"
+      :generateToken="generateToken"
     />
 
     <DeleteConfirmationDialog

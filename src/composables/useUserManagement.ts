@@ -103,6 +103,11 @@ const deleteSelectedUsers = async () => {
   }
 };
 
+  const generateToken = () => {
+  const token = Math.random().toString(36).substring(2, 10).toUpperCase();
+  newUser.value.token = token; // Update the newUser token
+};
+
 const addUser = async () => {
   if (
     !newUser.value.username ||
@@ -217,7 +222,7 @@ const viewUser = (userId: number) => {
   const user = users.value.find((user) => user.id === userId);
   if (user) {
     userToView.value = { ...user }; // Clone the user object
-    showViewUserDialog.value = true; 
+    showViewUserDialog.value = true;
   }
 };
 
@@ -243,7 +248,8 @@ return {
   viewUser,
   saveUserChanges,
   editUser,
-  addUser
+  addUser,
+  generateToken,
   };
 }
 

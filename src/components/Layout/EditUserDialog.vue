@@ -3,7 +3,6 @@ import { defineProps, defineEmits } from 'vue'
 import Dialog from 'primevue/dialog'
 import InputText from 'primevue/inputtext'
 import Dropdown from 'primevue/dropdown'
-import Checkbox from 'primevue/checkbox'
 import Button from 'primevue/button'
 import { useUserManagement } from '@/composables/useUserManagement'
 import ToggleSwitch from 'primevue/togglebutton'
@@ -45,7 +44,7 @@ const saveUserChanges = () => {
           </span>
           <InputText
             id="edit-username"
-            v-model="userToEdit.username"
+            v-model="props.userToEdit.username"
             placeholder="Robert"
             class="w-full"
           />
@@ -61,7 +60,7 @@ const saveUserChanges = () => {
           </span>
           <InputText
             id="edit-login"
-            v-model="userToEdit.login"
+            v-model="props.userToEdit.login"
             placeholder="crmsystem"
             class="w-full"
           />
@@ -77,7 +76,7 @@ const saveUserChanges = () => {
           </span>
           <InputText
             id="edit-password"
-            v-model="userToEdit.password"
+            v-model="props.userToEdit.password"
             type="password"
             placeholder="********"
             class="w-full"
@@ -94,7 +93,7 @@ const saveUserChanges = () => {
           </span>
           <InputText
             id="edit-token"
-            v-model="userToEdit.token"
+            v-model="props.userToEdit.token"
             placeholder="erwb23g"
             class="w-full"
             disabled
