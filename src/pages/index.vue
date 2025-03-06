@@ -21,7 +21,7 @@ const cards = ref<Cards[]>([
     title: 'Advanced Card',
   },
   {
-    url: 'https://picsum.photos/seed/picsum/200/300',
+    url: 'https://picsum.photos/seed/picsum/200/300'
     title: 'Advanced Card',
   },
   {

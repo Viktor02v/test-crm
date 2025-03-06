@@ -12,6 +12,9 @@ const props = defineProps({
   sortById: Function,
   sortByLogin: Function,
   sortByRegDate: Function,
+  sortByName: Function, //Add sorting by name
+  sortByActive: Function, //Add sorting by status
+  sortByToken: Function, //Add sorting by token
 })
 
 const emit = defineEmits(['toggleSelectAll', 'viewUser', 'editUser', 'update:selectedUsers'])
@@ -31,7 +34,6 @@ const handleToggleSelectAll = () => {
   }
 }
 
-// individual checkbox change
 const handleCheckboxChange = (isChecked: boolean, userId: number) => {
   const updatedSelectedUsers = isChecked
     ? [...props.selectedUsers, userId]
@@ -81,8 +83,20 @@ const handleEditUser = (userId: number) => {
       :sortable="true"
       :sortFunction="sortByLogin"
     />
-    <Column class="border-b" field="username" header="Name" />
-    <Column class="border-b" field="active" header="Active">
+    <Column
+      class="border-b"
+      field="username"
+      header="Name"
+      :sortable="true"
+      :sortFunction="sortByName"
+    />
+    <Column
+      class="border-b"
+      field="active"
+      header="Active"
+      :sortable="true"
+      :sortFunction="sortByActive"
+    >
       <template #body="slotProps">
         <div
           :class="{
@@ -93,8 +107,14 @@ const handleEditUser = (userId: number) => {
       </template>
     </Column>
 
-    <!-- Role-Based Columns -->
-    <Column class="border-b" v-if="isAdmin" field="token" header="Token" />
+    <Column
+      class="border-b"
+      v-if="isAdmin"
+      field="token"
+      header="Token"
+      :sortable="true"
+      :sortFunction="sortByToken"
+    />
     <Column
       class="border-b"
       v-if="isAdmin || isManager"

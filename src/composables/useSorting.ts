@@ -62,11 +62,73 @@ export function useSorting() {
     return order === 1 ? dateA > dateB : dateA < dateB;
   };
 
+  const sortByName = (event: any) => {
+    const data = [...event.data];
+    const order = event.order;
+    for (let i = 1; i < data.length; i++) {
+      const current = data[i];
+      let j = i - 1;
+      while (j >= 0 && compareNames(data[j].username, current.username, order)) {
+        data[j + 1] = data[j];
+        j--;
+      }
+      data[j + 1] = current;
+    }
+    return data;
+  };
+
+  const compareNames = (a: string, b: string, order: number) => {
+    const lengthA = a.length;
+    const lengthB = b.length;
+    return order === 1 ? lengthA > lengthB : lengthA < lengthB;
+  };
+
+  const sortByActive = (event: any) => {
+    const data = [...event.data];
+    const order = event.order;
+    for (let i = 1; i < data.length; i++) {
+      const current = data[i];
+      let j = i - 1;
+      while (j >= 0 && compareActive(data[j].active, current.active, order)) {
+        data[j + 1] = data[j];
+        j--;
+      }
+      data[j + 1] = current;
+    }
+    return data;
+  };
+
+  const compareActive = (a: boolean, b: boolean, order: number) => {
+    return order === 1 ? a > b : a < b;
+  };
+
+  const sortByToken = (event: any) => {
+    const data = [...event.data];
+    const order = event.order;
+    for (let i = 1; i < data.length; i++) {
+      const current = data[i];
+      let j = i - 1;
+      while (j >= 0 && compareTokens(data[j].token, current.token, order)) {
+        data[j + 1] = data[j];
+        j--;
+      }
+      data[j + 1] = current;
+    }
+    return data;
+  };
+
+  const compareTokens = (a: string, b: string, order: number) => {
+    const lengthA = a.length;
+    const lengthB = b.length;
+    return order === 1 ? lengthA > lengthB : lengthA < lengthB;
+  };
+
   return {
     sortById,
     sortByLogin,
     sortByRegDate,
-    compareDates,
-    compareIds
+    sortByName,
+    sortByActive,
+    sortByToken,
   };
 }

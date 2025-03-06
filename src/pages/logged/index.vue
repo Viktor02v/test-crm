@@ -15,16 +15,13 @@ const {
   userToEdit,
   userToView,
   saveUserChanges,
+  addUser,
   showViewUserDialog,
   showEditUserDialog,
-
-  addUser,
   newUser,
   roles,
   showAddUserDialog,
-
   showDeleteDialog,
-
   selectedUsers,
   showGreeting,
   isAdmin,
@@ -36,7 +33,7 @@ const {
   editUser,
 } = useUserManagement()
 
-const { sortById, sortByLogin, sortByRegDate } = useSorting()
+const { sortById, sortByLogin, sortByRegDate, sortByActive, sortByName, sortByToken } = useSorting()
 
 onMounted(async () => {
   await fetchUsers()
@@ -49,7 +46,7 @@ console.log(users.value)
 </script>
 
 <template>
-  <div class="w-full h-full flex flex-col items-center justify-center p-4">
+  <div class="w-full h-full px-[145px] flex flex-col items-center justify-center p-4">
     <!-- Action Buttons -->
     <div class="flex w-full items-center justify-between mb-4">
       <div
@@ -82,6 +79,9 @@ console.log(users.value)
       :sortById="sortById"
       :sortByLogin="sortByLogin"
       :sortByRegDate="sortByRegDate"
+      :sortByName="sortByName"
+      :sortByActive="sortByActive"
+      :sortByToken="sortByToken"
       @viewUser="viewUser"
       @editUser="editUser"
     />
