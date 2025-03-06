@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import InputText from 'primevue/inputtext'
-import InputGroup from 'primevue/inputgroup'
-import InputGroupAddon from 'primevue/inputgroupaddon'
+import Password from 'primevue/password'
 import Button from 'primevue/button'
 import Card from 'primevue/card'
 import { ref, onMounted, onUnmounted } from 'vue'
@@ -20,12 +19,6 @@ interface Cards {
 const email = ref<string>('')
 const error = ref<string>('')
 const password = ref<string>('')
-
-const showPassword = ref(false)
-
-const toggleShowPassword = () => {
-  showPassword.value = !showPassword.value
-}
 
 const isFormOpen = ref(false)
 
@@ -97,7 +90,7 @@ onUnmounted(() => {
 </script>
 <template>
   <div
-    class=" relative flex flex-col justify-around w-full space-y-[32px] h-full py-[30px] px-[104px]"
+    class="relative flex flex-col justify-around w-full space-y-[32px] h-full py-[30px] px-[104px]"
   >
     <!-- Hello Element -->
     <div class="border border-white bg-white w-full py-[16px] px-[24px] rounded">
@@ -106,13 +99,13 @@ onUnmounted(() => {
         <div class="text-[40px]">Welcome to CRM System</div>
         <div class="flex items-center gap-2">
           <div class="icon-container">
-            <i class="pi pi-github" style="font-size: 2rem" />
+            <i class="pi pi-github" style="font-size: 2rem; color: #2762EA" />
           </div>
           <div class="icon-container">
-            <i class="pi pi-twitter" style="font-size: 2rem" />
+            <i class="pi pi-instagram" style="font-size: 2rem; color: #2762EA" />
           </div>
           <div class="icon-container">
-            <i class="pi pi-linkedin" style="font-size: 2rem" />
+            <i class="pi pi-linkedin" style="font-size: 2rem; color: #2762EA" />
           </div>
         </div>
       </div>
@@ -143,40 +136,47 @@ onUnmounted(() => {
     <!-- Log In Form -->
     <div class="flex flex-col items-center justify-center">
       <div v-if="isFormOpen">
-        <form
-          @submit.prevent="handleLogIn"
-          class="w-[300px] flex flex-col gap-10 items-center justify-center"
-        >
+        <form @submit.prevent="handleLogIn" class="w-[300px]">
           <!-- Login -->
-          <InputGroup class="justify-center relative w-full">
-            <label class="absolute top-[-30px] text-[14px] left-0" for="email">Login</label>
-            <InputGroupAddon class="rounded-l">
-              <i class="pi pi-user"></i>
-            </InputGroupAddon>
-            <InputText v-model="email" type="text" placeholder="my.own.crm" />
-          </InputGroup>
+          <div>
+            <label for="login" class="block text-sm font-medium mb-1">Username</label>
+            <div class="p-inputgroup">
+              <span class="p-inputgroup-addon">
+                <i class="pi pi-user"></i>
+              </span>
+              <InputText
+                type="text"
+                id="login"
+                v-model="email"
+                placeholder="my.own.crm"
+                class="p-input"
+              />
+            </div>
+          </div>
 
-          <!-- Password -->
-          <InputGroup class="justify-center relative w-full">
-            <label class="absolute top-[-30px] left-0 text-[14px]" for="password">Password</label>
-            <InputGroupAddon class="rounded-l">
-              <i class="pi pi-key"></i>
-            </InputGroupAddon>
-            <InputText
-              v-model="password"
-              :type="showPassword ? 'text' : 'password'"
-              placeholder="12345678"
-            />
-            <InputGroupAddon class="cursor-pointer" @click="toggleShowPassword">
-              <i :class="showPassword ? 'pi pi-eye-slash' : 'pi pi-eye'"></i>
-            </InputGroupAddon>
-          </InputGroup>
+          <div>
+            <label for="password" class="block text-sm font-medium mb-1">Password</label>
+            <div class="p-inputgroup">
+              <span class="p-inputgroup-addon">
+                <i class="pi pi-key"></i>
+              </span>
+              <Password
+                id="password"
+                v-model="password"
+                placeholder="12345678"
+                class="p-input"
+                :feedback="false"
+                toggleMask
+              />
+            </div>
+          </div>
         </form>
 
         <div class="flex items-center space-x-[7px] mt-[16px] mb-[24px]">
           <input type="checkbox" class="h-[16px] w-[16px]" />
           <span class="text-[14px]">Remember me</span>
         </div>
+
       </div>
 
       <Button
@@ -198,7 +198,6 @@ onUnmounted(() => {
       </Button>
     </div>
 
-
     <!-- Error Message -->
     <div v-if="error" class="w-full flex item-end justify-end">
       <div
@@ -215,7 +214,7 @@ onUnmounted(() => {
           <div>
             <Button
               icon="pi pi-times"
-              class="bg-transparent border-none text-white cursor-pointer text-[#DC2626]"
+              class="bg-transparent border-none cursor-pointer text-[#DC2626]"
               @click="error = false"
             />
           </div>
@@ -226,13 +225,19 @@ onUnmounted(() => {
 </template>
 
 <style scoped>
-.icon-container {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  color: blue;
-  padding: 1px;
-  border-radius: 8px;
-  margin: 1px;
+.p-inputgroup-addon {
+  border: 1px solid #cbd5e1;
+  border-right: 0;
+}
+
+.p-inputgroup {
+  margin-bottom: 1rem;
+}
+.p-input {
+  width: 100%;
+  height: 39px;
+  border: 1px solid #cbd5e1;
+  border-left: 0;
+  padding-left:;
 }
 </style>
